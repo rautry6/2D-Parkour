@@ -67,6 +67,7 @@ public class Movement : MonoBehaviour
     void StopMovement()
     {
         rb.linearVelocity = Vector2.zero;
+        direction = 1;
     }
 
     void StartMovement()
