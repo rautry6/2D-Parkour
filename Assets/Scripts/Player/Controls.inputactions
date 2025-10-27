@@ -27,6 +27,45 @@
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6dbc17c6-7f16-4845-913e-3a3a38aec83a",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Respawn",
+            "id": "b7349f23-c728-42fc-a840-3ef3f1dd0b97",
+            "actions": [
+                {
+                    "name": "Reset",
+                    "type": "Button",
+                    "id": "7bc8c20d-386a-4880-8395-af12dd8782f9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d5864e35-7eca-4d61-aa48-5bd4180665ee",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reset",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

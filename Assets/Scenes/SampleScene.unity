@@ -2342,7 +2342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RespawnManager
   respawnPoint: {fileID: 270952747}
   player: {fileID: 2092355294}
-  respawnHeightOffset: 1
+  respawnHeightOffset: 0.5
 --- !u!1 &675314033
 GameObject:
   m_ObjectHideFlags: 0

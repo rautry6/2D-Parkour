@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RespawnManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class RespawnManager : MonoBehaviour
 
     public event PlayerRespawnDelegate OnPlayerRespawn;
 
+    private Controls playerControls;
+    private InputAction respawnAction;
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +31,23 @@ public class RespawnManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        playerControls = new Controls();
+        respawnAction = playerControls.Respawn.Reset;
+    }
+
+    void OnEnable()
+    {
+        respawnAction.Enable();
+
+        respawnAction.performed += ctx => Respawn();
+    }
+
+    void OnDisable()
+    {
+        respawnAction.Disable();
+
+        respawnAction.performed -= ctx => Respawn();
     }
 
     public void Respawn()
