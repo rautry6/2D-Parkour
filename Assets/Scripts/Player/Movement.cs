@@ -67,11 +67,11 @@ public class Movement : MonoBehaviour
     void StopMovement()
     {
         rb.linearVelocity = Vector2.zero;
-        direction = 1;
     }
 
     void StartMovement()
     {
+        direction = 1;
         rb.linearVelocity = new Vector2(speed * direction, rb.linearVelocity.y);
     }
 }

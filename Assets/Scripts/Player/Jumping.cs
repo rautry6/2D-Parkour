@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(GravityController), typeof(JumpRotator))]
 public class Jumping : MonoBehaviour
 {
 
@@ -14,13 +13,8 @@ public class Jumping : MonoBehaviour
 
     [SerializeField] private float jumpBufferTime = 0.1f;
 
-
-    private bool isGrounded = true;
-
-    [SerializeField] private LayerMask groundLayer;
-
-    [SerializeField] private float groundCheckDistance = 0.2f;
     private bool tryingToJump = false;
+    private bool jumpCheckOverride = false;
 
     private Rigidbody2D rb;
 
@@ -35,11 +29,14 @@ public class Jumping : MonoBehaviour
 
     private bool canJump = true;
 
+    private GravityController gravityController;
+
     void Awake()
     {
         controls = new Controls();
         rb = GetComponent<Rigidbody2D>();
         jumpAction = controls.Movement.Jump;
+        gravityController = GetComponent<GravityController>();
 
     }
 
@@ -64,13 +61,25 @@ public class Jumping : MonoBehaviour
         tryingToJump = jumpAction.IsPressed();
 
         // Better jumping physics
-        if (!isGrounded && rb.linearVelocity.y < 0)
+        if (!gravityController.IsGrounded && DownwardsVelocityCheck())
         {
-            rb.gravityScale = gravityScale * fallMultiplier;
+            rb.gravityScale = gravityScale * fallMultiplier * gravityController.GravityDirection;
         }
         else
         {
-            rb.gravityScale = gravityScale;
+            rb.gravityScale = gravityScale * gravityController.GravityDirection;
+        }
+    }
+
+    private bool DownwardsVelocityCheck()
+    {
+        if (gravityController.GravityDirection == 1)
+        {
+            return rb.linearVelocity.y < 0;
+        }
+        else
+        {
+            return rb.linearVelocity.y > 0;
         }
     }
 
@@ -81,34 +90,22 @@ public class Jumping : MonoBehaviour
         {
             Jump();
         }
-
-        GroundedCheck();
     }
 
     void Jump()
     {
-        if (isGrounded)
+        if (gravityController.IsGrounded || jumpCheckOverride)
         {
-            rb.gravityScale = gravityScale;
+            jumpCheckOverride = false;
+
+            rb.gravityScale = gravityScale * gravityController.GravityDirection;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * gravityController.GravityDirection * jumpForce, ForceMode2D.Impulse);
 
             OnJump?.Invoke();
         }
     }
 
-    void GroundedCheck()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
-        if (hit.collider != null)
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
-    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -118,18 +115,12 @@ public class Jumping : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-    {
-        Color rayColor = isGrounded ? Color.green : Color.red;
-        Gizmos.color = rayColor;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
-    }
-
     private IEnumerator JumpBufferCoroutine()
     {
-        isGrounded = true;
+        jumpCheckOverride = true;
         yield return new WaitForSeconds(jumpBufferTime);
-        isGrounded = false;
+        jumpCheckOverride = false;
+
     }
 
 }

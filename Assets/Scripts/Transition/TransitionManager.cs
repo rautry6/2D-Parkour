@@ -91,7 +91,7 @@ public class TransitionManager : MonoBehaviour
         yield return new WaitUntil(() => !transitionEffectHelper.playerGrown);
 
         MoveToNextRoom();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.9f);
 
         transitionEffectHelper.GrowPlayer();
         yield return new WaitUntil(() => transitionEffectHelper.playerGrown);

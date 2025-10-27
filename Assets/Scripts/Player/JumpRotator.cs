@@ -47,4 +47,11 @@ public class JumpRotator : MonoBehaviour
             playerModel.rotation = startingRotation;
         });
     }
+
+    public void StopRotate()
+    {
+        currentTween?.Kill();
+
+        playerModel.rotation = startingRotation;
+    }
 }

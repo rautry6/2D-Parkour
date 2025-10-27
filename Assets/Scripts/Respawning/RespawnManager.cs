@@ -12,6 +12,10 @@ public class RespawnManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float respawnHeightOffset = 1.0f;
 
+    public delegate void PlayerRespawnDelegate();
+
+    public event PlayerRespawnDelegate OnPlayerRespawn;
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +31,7 @@ public class RespawnManager : MonoBehaviour
 
     public void Respawn()
     {
+        OnPlayerRespawn?.Invoke();
         player.transform.position = respawnPoint.position + new Vector3(0, respawnHeightOffset, 0);
     }
 
